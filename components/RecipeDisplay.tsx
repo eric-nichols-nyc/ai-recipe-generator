@@ -9,7 +9,6 @@ const RecipeDisplay = ({ recipe }: { recipe: string }) => {
       transition={{ duration: 0.5 }}
       className=""
     >
-      <h2 className="text-xl font-bold">Generated Recipe</h2>
       <Markdown>{recipe}</Markdown>
       </motion.div>
   );

@@ -7,7 +7,7 @@ const ImageDisplay = ({ imageUrl }: { imageUrl: string }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="p-4 border rounded"
+      className="p-4"
     >
       <Image
             src={imageUrl}
