@@ -31,19 +31,23 @@ const RecipeForm = ({ onGenerate }: { onGenerate: (ingredients: string[]) => voi
   return (
     <form onSubmit={handleSubmit} className="container flex flex-col gap-3">
       <div className="flex flex-col sm:flex-row gap-3">
-        <Input
-          type="text"
-          value={ingredients}
-          onChange={(e) => setIngredients(e.target.value)}
-          placeholder="Enter ingredients separated by commas"
-          className="border p-2 w-full sm:w-[60%] text-black"
-        />
+        <div className="w-full sm:w-[60%]">
+          <label htmlFor="ingredients" className="sr-only">Ingredients</label>
+          <Input
+            id="ingredients"
+            type="text"
+            value={ingredients}
+            onChange={(e) => setIngredients(e.target.value)}
+            placeholder="Enter ingredients separated by commas"
+            className="border p-2 w-full text-black"
+          />
+        </div>
         <div className="flex gap-2">
           <Button type="submit" className="flex-1 bg-blue-500 text-white p-2 rounded">Generate Recipe</Button>
           <Button type="button" onClick={clearIngredients} className="flex-1 bg-gray-300 text-black p-2 rounded">Clear</Button>
         </div>
       </div>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-red-500" role="alert">{error}</p>}
     </form>
   );
 };
