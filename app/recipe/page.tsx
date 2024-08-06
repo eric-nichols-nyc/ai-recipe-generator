@@ -18,14 +18,15 @@ const Home = () => {
         generateRecipe(ingredients),
         generateImage(ingredients),
       ]);
-      setLoading(false);
+      setLoading(false)
       setImageUrl(imageUrl);
-
       for await (const delta of readStreamableValue(recipe!)) {
         setRecipe(delta ?? "");
       }
     } catch (error) {
       console.error("Error generating recipe or image:", error);
+    }finally{
+        setLoading(false)
     }
   };
 
@@ -75,7 +76,7 @@ const Home = () => {
         </motion.div>
       ) : (
         <AnimatePresence>
-          {(recipe || imageUrl) && (
+          {(recipe) && (
             <motion.section 
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
@@ -95,16 +96,10 @@ const Home = () => {
                 initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
-                className="w-full p-8"
+                className="w-full flex justify-center"
               >
                 {imageUrl && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6, duration: 0.5 }}
-                  >
                     <ImageDisplay imageUrl={imageUrl} />
-                  </motion.div>
                 )}
               </motion.div>
             </motion.section>
