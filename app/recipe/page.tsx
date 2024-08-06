@@ -53,8 +53,8 @@ const Home = () => {
 
   return (
     <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className="min-h-screen w-screen mx-auto flex flex-col items-center max-w-3xl"
     >
@@ -65,8 +65,9 @@ const Home = () => {
       <RecipeForm onGenerate={handleGenerateRecipe} />
       {loading ? (
         <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
           className="mt-10 relative"
         >
           <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md"></div>
@@ -76,24 +77,24 @@ const Home = () => {
         <AnimatePresence>
           {(recipe || imageUrl) && (
             <motion.section 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
+              exit={{ opacity: 0, y: -40 }}
               transition={{ duration: 0.5 }}
               className="flex flex-col-reverse w-full items-center gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-20 text-left"
             >
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
                 className="w-full p-8 rounded"
               >
                 {recipe && <RecipeDisplay recipe={recipe} />}
               </motion.div>
               <motion.div 
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
                 className="w-full p-8"
               >
                 {imageUrl && <ImageDisplay imageUrl={imageUrl} />}
