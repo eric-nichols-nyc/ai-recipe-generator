@@ -3,7 +3,7 @@ import { useState } from "react";
 import RecipeForm from "@/components/RecipeForm";
 import RecipeDisplay from "@/components/RecipeDisplay";
 import ImageDisplay from "@/components/ImageDisplay";
-import { generateRecipe } from "@/actions/index";
+import { generateRecipe, generateImage } from "@/actions/index";
 import { readStreamableValue } from "ai/rsc";
 import { motion, AnimatePresence } from "framer-motion";
 const Home = () => {
