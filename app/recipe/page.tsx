@@ -97,7 +97,15 @@ const Home = () => {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="w-full p-8"
               >
-                {imageUrl && <ImageDisplay imageUrl={imageUrl} />}
+                {imageUrl && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6, duration: 0.5 }}
+                  >
+                    <ImageDisplay imageUrl={imageUrl} />
+                  </motion.div>
+                )}
               </motion.div>
             </motion.section>
           )}
