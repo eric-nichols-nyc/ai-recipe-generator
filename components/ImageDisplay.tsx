@@ -9,7 +9,6 @@ const ImageDisplay = ({ imageUrl }: { imageUrl: string }) => {
       transition={{ duration: 0.5 }}
       className="p-4 border rounded"
     >
-      <h2 className="text-xl font-bold">Generated Image</h2>
       <Image
             src={imageUrl}
             alt="Sample image"

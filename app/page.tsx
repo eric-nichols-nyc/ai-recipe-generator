@@ -1,65 +1,19 @@
-"use client";
-import { useState } from "react";
-import RecipeForm from "../components/RecipeForm";
-import RecipeDisplay from "../components/RecipeDisplay";
-import ImageDisplay from "../components/ImageDisplay";
-import { generateRecipe } from "../actions/index";
-import { readStreamableValue } from "ai/rsc";
-const Home = () => {
-  const [recipe, setRecipe] = useState<string | any>(undefined);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-  const handleGenerateRecipe = async (ingredients: string[]) => {
-    try {
-      const [recipe, imageUrl] = await Promise.all([
-        generateRecipe(ingredients),
-        generateImage(ingredients),
-      ]);
-      setImageUrl(imageUrl);
-
-      for await (const delta of readStreamableValue(recipe!)){
-        setRecipe(delta ?? "");
-
-      }
-    } catch (error) {
-      console.error("Error generating recipe or image:", error);
-    }
-  };
-
-  const generateImage = async (ingredients: string[]) => {
-    try {
-      const imageResponse = await fetch("/api/generate-image", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `Create a visually appealing presentation for a dish that includes ${ingredients.join(", ")} on a serving plate on a rustic wood table, and The lighting should be soft and natural, enhancing the inviting and appetizing display.`,
-        }),
-      });
-
-      const imageData = await imageResponse.json();
-      return imageData.imageUrl;
-    } catch (error) {
-      console.error("Error generating image:", error);
-      return null;
-    }
-  };
-
+export default function Home() {
   return (
-    <div className="min-h-screen w-screen mx-auto flex flex-col items-center bg-gradient-to-t from-indigo-300 via-violet-500 via-0% to-black">
-      <h1 className="text-2xl font-bold mb-4 mt-7">Recipe Generator</h1>
-      <RecipeForm onGenerate={handleGenerateRecipe} />
-      <section className="border flex flex-col-reverse w-full items-center gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-20">
-        <div className="w-full md:w-1/2 p-8 border rounded mt-8">
-          {recipe && <RecipeDisplay recipe={recipe} />}
+  
+      <div className="z-10">
+        <h1 className="text-4xl md:text-5xl font-bold mb-8 max-w-3xl">
+          Discover personalized culinary creations with AI-powered recipe
+          generation
+        </h1>
+        <div className="flex flex-col justify-center w-full sm:flex-row gap-4">
+          <Button className="bg-pink-600 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-pink-700 transition">
+            <Link href="/recipe">Get recipes</Link>
+          </Button>
         </div>
-        <div className="w-full md:w-1/2 p-8">
-          {imageUrl && <ImageDisplay imageUrl={imageUrl} />}
-        </div>
-      </section>
-    </div>
+      </div>
   );
-};
-
-export default Home;
+}
