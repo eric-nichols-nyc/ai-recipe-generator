@@ -5,7 +5,7 @@ import RecipeDisplay from "@/components/RecipeDisplay";
 import ImageDisplay from "@/components/ImageDisplay";
 import { generateRecipe } from "@/actions/index";
 import { readStreamableValue } from "ai/rsc";
-import { set } from "zod";
+import { motion, AnimatePresence } from "framer-motion";
 const Home = () => {
   const [recipe, setRecipe] = useState<string | any>(undefined);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -52,30 +52,57 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen w-screen mx-auto flex flex-col items-center max-w-3xl">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen w-screen mx-auto flex flex-col items-center max-w-3xl"
+    >
       <h1 className="text-3xl font-bold mb-4 mt-7 py-10 px-5 text-center">
         List up to five ingredients you&apos;d like to use up in the recipe,
         separated by commas.
       </h1>
       <RecipeForm onGenerate={handleGenerateRecipe} />
       {loading ? (
-        <div className="mt-10 relative">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-10 relative"
+        >
           <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md"></div>
           <span className="relative z-10">Thinking...</span>
-        </div>
+        </motion.div>
       ) : (
-        <>
-          <section className="flex flex-col-reverse w-full items-center gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-20 text-left">
-            <div className="w-full p-8 rounded">
-              {recipe && <RecipeDisplay recipe={recipe} />}
-            </div>
-            <div className="w-full p-8">
-              {imageUrl && <ImageDisplay imageUrl={imageUrl} />}
-            </div>
-          </section>
-        </>
+        <AnimatePresence>
+          {(recipe || imageUrl) && (
+            <motion.section 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col-reverse w-full items-center gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-20 text-left"
+            >
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="w-full p-8 rounded"
+              >
+                {recipe && <RecipeDisplay recipe={recipe} />}
+              </motion.div>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="w-full p-8"
+              >
+                {imageUrl && <ImageDisplay imageUrl={imageUrl} />}
+              </motion.div>
+            </motion.section>
+          )}
+        </AnimatePresence>
       )}
-    </div>
+    </motion.div>
   );
 };
 
