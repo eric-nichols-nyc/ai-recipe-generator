@@ -3,7 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Button } from "@/components/ui/button";
 import Head from "next/head";
-
+import Image from "next/image";
+import Link from "next/link";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -34,7 +35,7 @@ export default function RootLayout({
 
           <header className="flex justify-between items-center p-4 md:p-6 z-10">
             <div className="text-xl font-bold flex items-center">
-              <span className="mr-2">📺</span>
+              <Link href="/"><Image src="/images/logo.svg" alt="Logo" width={32} height={32} /></Link>
             </div>
           </header>
           <main className="h-full relative flex-grow flex flex-col justify-center items-center text-center p-4 md:p-8 bg-cover bg-center">
