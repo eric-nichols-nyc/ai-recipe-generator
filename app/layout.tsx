@@ -30,7 +30,7 @@ export default function RootLayout({
               name="description"
               content="Get curated show and movie recommendations with Open AI"
             />
-            <link rel="icon" href="/favicon.ico" />
+            <link rel="icon" href="/images/icon.svg" type="image/svg+xml" />
           </Head>
 
           <header className="flex justify-between items-center p-4 md:p-6 z-10">
