@@ -18,6 +18,7 @@ export async function POST(req: Request) {
         size: "1024x1024",
       });
       const imageUrl = response.data[0].url;
+      console.log('url = ',imageUrl);
       if(imageUrl === undefined){
       return NextResponse.json({ message: 'Image not found' }, { status: 404 });
     }else{

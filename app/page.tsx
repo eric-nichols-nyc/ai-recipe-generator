@@ -5,14 +5,13 @@ import RecipeDisplay from "../components/RecipeDisplay";
 import ImageDisplay from "../components/ImageDisplay";
 import { generateRecipe } from "../actions/index";
 import { readStreamableValue } from "ai/rsc";
-import Image from "next/image";
 const Home = () => {
   const [recipe, setRecipe] = useState<string | any>(undefined);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const handleGenerateRecipe = async (ingredients: string[]) => {
     try {
-      const [imageUrl] = await Promise.all([
+      const [recipe, imageUrl] = await Promise.all([
         generateRecipe(ingredients),
         generateImage(ingredients),
       ]);
@@ -48,10 +47,10 @@ const Home = () => {
   };
 
   return (
-    <div className="container min-h-screen mx-auto flex flex-col items-center bg-gradient-to-t from-indigo-300 via-violet-500 via-0% to-black">
-      <h1 className="text-2xl font-bold mb-4">Recipe Generator</h1>
+    <div className="min-h-screen w-screen mx-auto flex flex-col items-center bg-gradient-to-t from-indigo-300 via-violet-500 via-0% to-black">
+      <h1 className="text-2xl font-bold mb-4 mt-7">Recipe Generator</h1>
       <RecipeForm onGenerate={handleGenerateRecipe} />
-      <section className="flex flex-col-reverse w-full justify-center gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-20">
+      <section className="border flex flex-col-reverse w-full items-center gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-20">
         <div className="w-full md:w-1/2 p-8 border rounded mt-8">
           {recipe && <RecipeDisplay recipe={recipe} />}
         </div>

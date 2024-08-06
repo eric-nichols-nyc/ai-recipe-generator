@@ -10,13 +10,13 @@ const RecipeForm = ({ onGenerate }: { onGenerate: (ingredients: string[]) => voi
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="container flex gap-3">
       <input
         type="text"
         value={ingredients}
         onChange={(e) => setIngredients(e.target.value)}
         placeholder="Enter ingredients separated by commas"
-        className="border p-2 w-full text-black"
+        className="border p-2 w-[80%] text-black"
       />
       <button type="submit" className="bg-blue-500 text-white p-2 rounded">Generate Recipe</button>
     </form>
