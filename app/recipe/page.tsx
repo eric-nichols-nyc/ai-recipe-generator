@@ -1,69 +1,57 @@
 "use client";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { readStreamableValue } from "ai/rsc";
 import RecipeForm from "@/components/RecipeForm";
 import RecipeDisplay from "@/components/RecipeDisplay";
 import ImageDisplay from "@/components/ImageDisplay";
 import { generateRecipe, getRateLimit } from "@/actions/index";
-import { readStreamableValue } from "ai/rsc";
-import { motion, AnimatePresence } from "framer-motion";
+import { generateImage } from "@/utils/imageGeneration";
 
 const Home = () => {
-  const [recipe, setRecipe] = useState<string | any>(undefined);
+  const [recipe, setRecipe] = useState<string | undefined>(undefined);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleGenerateRecipe = async (ingredients: string[]) => {
     setError(null);
-    // get user rate limit
-    try {
-      const userRateLimit = await getRateLimit();
-      console.log('userRateLimit', userRateLimit);
-    } catch (error:any) {
-       setError(error.message || "An error occurred while getting user rate limit.");
-       return;
-    }
     setLoading(true);
 
     try {
-      const [recipe, imageUrl] = await Promise.all([
+      await checkRateLimit();
+      const [recipeStream, imageUrl] = await Promise.all([
         generateRecipe(ingredients),
         generateImage(ingredients),
       ]);
+      
       setImageUrl(imageUrl);
-      for await (const delta of readStreamableValue(recipe!)) {
-        setRecipe(delta ?? "");
-      }
+      await processRecipeStream(recipeStream);
     } catch (error: any) {
-      console.error("Error generating recipe or image:", error);
-      setError(
-        error.message || "An error occurred while generating the recipe."
-      );
+      handleError(error);
     } finally {
       setLoading(false);
     }
   };
 
-  const generateImage = async (ingredients: string[]) => {
+  const checkRateLimit = async () => {
     try {
-      const imageResponse = await fetch("/api/generate-image", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          prompt: `Create a visually appealing presentation for a dish that includes ${ingredients.join(
-            ", "
-          )} and The lighting should be soft and natural, enhancing the inviting and appetizing display.`,
-        }),
-      });
-
-      const imageData = await imageResponse.json();
-      return imageData.imageUrl;
-    } catch (error) {
-      console.error("Error generating image:", error);
-      return null;
+      const userRateLimit = await getRateLimit();
+      console.log('userRateLimit', userRateLimit);
+    } catch (error: any) {
+      throw new Error(error.message || "An error occurred while getting user rate limit.");
     }
+  };
+
+  const processRecipeStream = async (recipeStream: any) => {
+    for await (const delta of readStreamableValue(recipeStream)) {
+      setRecipe(delta ?? "");
+    }
+  };
+
+  const handleError = (error: any) => {
+    console.error("Error generating recipe or image:", error);
+    setError(error.message || "An error occurred while generating the recipe.");
   };
 
   return (
@@ -78,58 +66,64 @@ const Home = () => {
         separated by commas.
       </h1>
       <RecipeForm onGenerate={handleGenerateRecipe} />
-      {error && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mt-10 text-red-500"
-        >
-          {error}
-        </motion.div>
-      )}
-      {loading ? (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mt-10 relative"
-        >
-          <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md"></div>
-          <span className="relative z-10">Thinking...</span>
-        </motion.div>
-      ) : (
-        <AnimatePresence>
-          {recipe && (
-            <motion.section
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -40 }}
-              transition={{ duration: 0.5 }}
-              className="flex flex-col-reverse w-full items-center gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-20 text-left"
-            >
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                className="w-full p-8 rounded"
-              >
-                {recipe && <RecipeDisplay recipe={recipe} />}
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="w-full flex justify-center"
-              >
-                {imageUrl && <ImageDisplay imageUrl={imageUrl} />}
-              </motion.div>
-            </motion.section>
-          )}
-        </AnimatePresence>
-      )}
+      {error && <ErrorMessage error={error} />}
+      {loading ? <LoadingIndicator /> : <RecipeContent recipe={recipe} imageUrl={imageUrl} />}
     </motion.div>
   );
 };
+
+const ErrorMessage = ({ error }: { error: string }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className="mt-10 text-red-500"
+  >
+    {error}
+  </motion.div>
+);
+
+const LoadingIndicator = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.3 }}
+    className="mt-10 relative"
+  >
+    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md"></div>
+    <span className="relative z-10">Thinking...</span>
+  </motion.div>
+);
+
+const RecipeContent = ({ recipe, imageUrl }: { recipe: string | undefined, imageUrl: string | null }) => (
+  <AnimatePresence>
+    {recipe && (
+      <motion.section
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -40 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col-reverse w-full items-center gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-20 text-left"
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+          className="w-full p-8 rounded"
+        >
+          <RecipeDisplay recipe={recipe} />
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="w-full flex justify-center"
+        >
+          {imageUrl && <ImageDisplay imageUrl={imageUrl} />}
+        </motion.div>
+      </motion.section>
+    )}
+  </AnimatePresence>
+);
 
 export default Home;
