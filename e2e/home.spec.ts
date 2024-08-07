@@ -13,6 +13,9 @@ test('homepage has correct title, form, and animations', async ({ page }) => {
   // Check for the button with animation
   const button = page.getByRole('link', { name: 'Get Recipes' });
   await expect(button).toBeVisible();
+  // check that it goes to right link
+  await button.click();
+  await expect(page).toHaveURL(/recipe/);
 
 });
 
