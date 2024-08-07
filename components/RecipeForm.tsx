@@ -44,6 +44,7 @@ const RecipeForm = ({ onGenerate }: { onGenerate: (ingredients: string[]) => voi
           {/* Input field for ingredients */}
           <Input
             id="ingredients"
+            name="ingredients"
             type="text"
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
