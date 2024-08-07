@@ -31,7 +31,6 @@ export const getRateLimit = async (): Promise<number | any> => {
 export const generateRecipe = async (ingredients: string[]): Promise<StreamableValue | any> => {
   // check rate limit of user on each request
 
-
   try {
     const result = await streamText({
       model: openai("gpt-4o"),
