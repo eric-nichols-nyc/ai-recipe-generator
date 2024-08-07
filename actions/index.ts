@@ -25,4 +25,21 @@ export const generateRecipe = async(ingredients:string[]): Promise<StreamableVal
     } catch (err) {
         return { message: err }
     }
+}import { streamText } from 'ai';
+
+export async function generateRecipe(ingredients: string[], userId: string) {
+  const response = await fetch('/api/generate-recipe', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ingredients, userId }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to generate recipe');
+  }
+
+  return response.body;
 }

@@ -6,27 +6,32 @@ import ImageDisplay from "@/components/ImageDisplay";
 import { generateRecipe } from "@/actions/index";
 import { readStreamableValue } from "ai/rsc";
 import { motion, AnimatePresence } from "framer-motion";
+
 const Home = () => {
   const [recipe, setRecipe] = useState<string | any>(undefined);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerateRecipe = async (ingredients: string[]) => {
     setLoading(true);
+    setError(null);
     try {
+      const userId = 'user123'; // Replace this with actual user identification logic
       const [recipe, imageUrl] = await Promise.all([
-        generateRecipe(ingredients),
+        generateRecipe(ingredients, userId),
         generateImage(ingredients),
       ]);
-      setLoading(false)
+      setLoading(false);
       setImageUrl(imageUrl);
       for await (const delta of readStreamableValue(recipe!)) {
         setRecipe(delta ?? "");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error generating recipe or image:", error);
-    }finally{
-        setLoading(false)
+      setError(error.message || "An error occurred while generating the recipe.");
+    } finally {
+      setLoading(false);
     }
   };
 
