@@ -1,4 +1,5 @@
 "use client";
+// Import necessary dependencies and components
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { readStreamableValue } from "ai/rsc";
@@ -8,18 +9,23 @@ import ImageDisplay from "@/components/ImageDisplay";
 import { generateRecipe, getRateLimit } from "@/actions/index";
 import { generateImage } from "@/utils/imageGeneration";
 
+// Main component
 const Home = () => {
+  // State variables
   const [recipe, setRecipe] = useState<string | undefined>(undefined);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Function to handle recipe generation
   const handleGenerateRecipe = async (ingredients: string[]) => {
     setError(null);
     setLoading(true);
 
     try {
+      // Check rate limit before proceeding
       await checkRateLimit();
+      // Generate recipe and image concurrently
       const [recipeStream, imageUrl] = await Promise.all([
         generateRecipe(ingredients),
         generateImage(ingredients),
@@ -34,6 +40,7 @@ const Home = () => {
     }
   };
 
+  // Function to check user's rate limit
   const checkRateLimit = async () => {
     try {
       const userRateLimit = await getRateLimit();
@@ -43,17 +50,20 @@ const Home = () => {
     }
   };
 
+  // Function to process the recipe stream
   const processRecipeStream = async (recipeStream: any) => {
     for await (const delta of readStreamableValue(recipeStream)) {
           setRecipe(delta?.toString());
     }
   };
 
+  // Function to handle errors
   const handleError = (error: any) => {
     console.error("Error generating recipe or image:", error);
     setError(error.message || "An error occurred while generating the recipe.");
   };
 
+  // Render the component
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -72,6 +82,7 @@ const Home = () => {
   );
 };
 
+// Component to display error messages
 const ErrorMessage = ({ error }: { error: string }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -83,6 +94,7 @@ const ErrorMessage = ({ error }: { error: string }) => (
   </motion.div>
 );
 
+// Component to display loading indicator
 const LoadingIndicator = () => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -95,6 +107,7 @@ const LoadingIndicator = () => (
   </motion.div>
 );
 
+// Component to display recipe content and image
 const RecipeContent = ({ recipe, imageUrl }: { recipe: string | undefined, imageUrl: string | null }) => (
   <AnimatePresence>
     {recipe && (
