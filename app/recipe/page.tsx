@@ -40,7 +40,7 @@ const Home = () => {
         body: JSON.stringify({
           prompt: `Create a visually appealing presentation for a dish that includes ${ingredients.join(
             ", "
-          )} on a serving plate on a rustic wood table, and The lighting should be soft and natural, enhancing the inviting and appetizing display.`,
+          )} and The lighting should be soft and natural, enhancing the inviting and appetizing display.`,
         }),
       });
 
