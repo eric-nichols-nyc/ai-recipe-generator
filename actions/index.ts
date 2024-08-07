@@ -3,43 +3,54 @@
 import { streamText } from "ai";
 import { StreamableValue, createStreamableValue } from "ai/rsc"
 import { openai } from "@ai-sdk/openai";
+import { getRateLimitCount, incrementRateLimitCount } from '@/lib/redis';
+import { Redis } from '@upstash/redis';
+import { Ratelimit } from '@upstash/ratelimit';
+import { headers } from 'next/headers';
 
-export const generateRecipe = async(ingredients:string[]): Promise<StreamableValue | any> => {
-    try {
-        const result = await streamText({
-            model: openai("gpt-4o"),
-            temperature: 0.5,
-            messages: [
-                {
-                  role: 'system',
-                  content: 'You are a helpful assistant that generates recipes based on given ingredients.'
-                },
-                {
-                  role: 'user',
-                  content: `Generate a recipe using the following ingredients: ${ingredients.join(', ')}`
-                }
-              ]
-        });
-        return createStreamableValue(result.textStream).value;
+const rateLimit = new Ratelimit({
+  redis: new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL!,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+  }),
+  limiter: Ratelimit.slidingWindow(4, "600 s"),
+});
 
-    } catch (err) {
-        return { message: err }
-    }
-}import { streamText } from 'ai';
+const ip = headers().get('x-forwarded-for');
 
-export async function generateRecipe(ingredients: string[], userId: string) {
-  const response = await fetch('/api/generate-recipe', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ ingredients, userId }),
-  });
+export const getRateLimit = async (): Promise<number | any> => {
+  const { remaining, limit, success } = await rateLimit.limit(ip!);
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Failed to generate recipe');
+  if (remaining === 0) {
+    throw new Error("You have reached your requests limit.");
   }
 
-  return response.body;
+  return remaining;
 }
+
+export const generateRecipe = async (ingredients: string[]): Promise<StreamableValue | any> => {
+  // check rate limit of user on each request
+
+
+  try {
+    const result = await streamText({
+      model: openai("gpt-4o"),
+      temperature: 0.5,
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a helpful assistant that generates recipes based on given ingredients.'
+        },
+        {
+          role: 'user',
+          content: `Generate a recipe using the following ingredients: ${ingredients.join(', ')}`
+        }
+      ]
+    });
+    return createStreamableValue(result.textStream).value;
+
+  } catch (err) {
+    return { message: err }
+  }
+}
+
