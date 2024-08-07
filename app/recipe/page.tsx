@@ -45,7 +45,7 @@ const Home = () => {
 
   const processRecipeStream = async (recipeStream: any) => {
     for await (const delta of readStreamableValue(recipeStream)) {
-      setRecipe(delta ?? "");
+      setRecipe((prevRecipe) => (prevRecipe ?? "") + (delta ?? ""));
     }
   };
 
