@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+
+<img src="public/Screenshot.png" width="500" />
 ## Project Overview
 
 This project is a Recipe Generator application that uses AI to create unique recipes based on user input. It features a modern, responsive UI built with Next.js and integrates with AI services for recipe and image generation.
