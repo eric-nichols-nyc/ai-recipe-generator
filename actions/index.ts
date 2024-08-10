@@ -42,7 +42,17 @@ export const generateRecipe = async (ingredients: string[]): Promise<StreamableV
         },
         {
           role: 'user',
-          content: `Generate a recipe using the following ingredients: ${ingredients.join(', ')}`
+          content: `Generate a recipe based on the following list of ingredients ${ingredients.join(', ')}. The recipe should include a title, a list of ingredients, and step-by-step instructions.
+
+          Title: [Recipe Title]
+          Ingredients:
+          - [List of ingredients]
+          
+          Instructions:
+          1. [Step 1]
+          2. [Step 2]
+          3. [Step 3]
+          ...`
         }
       ]
     });

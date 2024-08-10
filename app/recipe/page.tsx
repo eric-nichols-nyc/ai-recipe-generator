@@ -4,10 +4,11 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { readStreamableValue } from "ai/rsc";
 import RecipeForm from "@/components/RecipeForm";
-import RecipeDisplay from "@/components/RecipeDisplay";
 import ImageDisplay from "@/components/ImageDisplay";
 import { generateRecipe, getRateLimit } from "@/actions/index";
 import { generateImage } from "@/utils/imageGeneration";
+import MarkdownTitleExtractor from "@/components/MarkdownTitleExtractor";
+import RecipeParser from "@/components/RecipeParser";
 
 // Main component
 const Home = () => {
@@ -69,7 +70,7 @@ const Home = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen w-screen mx-auto flex flex-col items-center max-w-3xl"
+      className="min-h-screen w-screen mx-auto flex flex-col items-center max-w-6xl"
     >
       <h1 className="text-3xl font-bold mb-4 mt-7 py-10 px-5 text-center">
         List up to five ingredients you&apos;d like to use up in the recipe,
@@ -122,9 +123,9 @@ const RecipeContent = ({ recipe, imageUrl }: { recipe: string | undefined, image
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="w-full p-8 rounded"
+          className="w-full px-8 rounded"
         >
-          <RecipeDisplay recipe={recipe} />
+          <RecipeParser markdown={recipe} />
         </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -133,6 +134,14 @@ const RecipeContent = ({ recipe, imageUrl }: { recipe: string | undefined, image
           className="w-full flex justify-center"
         >
           {imageUrl && <ImageDisplay imageUrl={imageUrl} />}
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="w-full flex justify-center"
+        >
+          <MarkdownTitleExtractor markdown={recipe} />
         </motion.div>
       </motion.section>
     )}
