@@ -127,14 +127,8 @@ const RecipeContent = ({ recipe, imageUrl }: { recipe: string | undefined, image
         >
           <RecipeParser markdown={recipe} />
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-          className="w-full flex justify-center"
-        >
-          {imageUrl && <ImageDisplay imageUrl={imageUrl} />}
-        </motion.div>
+      
+          {imageUrl ? <ImageDisplay imageUrl={imageUrl} /> : <div className="border">Loading</div>}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}

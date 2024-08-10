@@ -34,17 +34,17 @@ const RecipeParser = ({ markdown }: { markdown: string }) => {
   return (
     <div className="w-full mx-auto">
       <div className="flex gap-3">
-        <div className="flex flex-col flex-1 bg-grey-100 p-4 rounded-lg mb-4">
+        <div className="flex flex-col flex-1 bg-grey-100 p-4 rounded-lg mb-4 border">
           <h2 className="text-2xl font-semibold mb-2">Ingredients:</h2>
           <ul className="">
             {ingredients.map((ingredient, index) => (
-              <li key={index} className="mb-1">
+              <li key={index} className="mb-2">
                 {ingredient}
               </li>
             ))}
           </ul>
         </div>
-        <div className="flex flex-col flex-1 p-4 rounded-lg">
+        <div className="flex flex-col flex-1 p-4 rounded-lg border">
           <h2 className="text-2xl font-semibold mb-2">Instructions:</h2>
           <ul className="list-inside">
             {instructions.map((instruction, index) => (

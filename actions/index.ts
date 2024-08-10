@@ -42,8 +42,9 @@ export const generateRecipe = async (ingredients: string[]): Promise<StreamableV
         },
         {
           role: 'user',
-          content: `Generate a recipe based on the following list of ingredients ${ingredients.join(', ')}. The recipe should include a title, a list of ingredients, and step-by-step instructions.
+          content: `Generate a recipe based on the following list of ingredients ${ingredients.join(', ')}. The recipe should include a title, a list of ingredients, and no more than seven step-by-step instructions that are one sentence long each. The recipe should be in the format of a markdown list with each step numbered and formatted as follows:
 
+          Recipe:
           Title: [Recipe Title]
           Ingredients:
           - [List of ingredients]
