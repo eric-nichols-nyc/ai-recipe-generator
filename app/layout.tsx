@@ -30,6 +30,7 @@ export default function RootLayout({
               name="description"
               content="Get curated show and movie recommendations with Open AI"
             />
+            <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
             <link rel="icon" href="/images/icon.svg" type="image/svg+xml" />
           </Head>
 
