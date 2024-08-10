@@ -4,6 +4,8 @@ const RecipeParser = ({ markdown }: { markdown: string }) => {
   const [title, setTitle] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [instructions, setInstructions] = useState([]);
+  // add description
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     const parseRecipe = (text: any) => {
@@ -26,6 +28,8 @@ const RecipeParser = ({ markdown }: { markdown: string }) => {
               .filter((item:string) => item.trim() !== "")
           : []
       );
+
+      
     };
 
     parseRecipe(markdown);

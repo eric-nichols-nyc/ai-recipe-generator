@@ -36,9 +36,9 @@ const RecipeForm = ({ onGenerate }: { onGenerate: (ingredients: string[]) => voi
   };
 
   return (
-    <form onSubmit={handleSubmit} className="container flex flex-col gap-3">
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="w-full sm:w-[60%]">
+    <form onSubmit={handleSubmit} className="container w-full flex flex-col gap-3">
+      <div className="flex flex-col w-full sm:flex-row gap-3 justify-center">
+        <div className="flex w-full sm:w-[60%]">
           {/* Hidden label for accessibility */}
           <label htmlFor="ingredients" className="sr-only">Ingredients</label>
           {/* Input field for ingredients */}
@@ -48,7 +48,7 @@ const RecipeForm = ({ onGenerate }: { onGenerate: (ingredients: string[]) => voi
             type="text"
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
-            placeholder="Enter ingredients separated by commas"
+            placeholder="Enter recipe idea or ingredients separated by commas"
             className="border p-2 w-full text-black"
           />
         </div>

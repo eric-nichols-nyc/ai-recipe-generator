@@ -9,10 +9,10 @@ const ImageDisplay = ({ imageUrl }: { imageUrl: string }) => {
       <Image
             src={imageUrl}
             alt="Sample image"
-            width={500}
-            height={300}
+            width={400}
+            height={400}
             className={`
-              duration-700 ease-in-out
+              duration-700 ease-in-out rounded-lg
               ${isLoading 
                 ? 'scale-105 blur-2xl grayscale'
                 : 'scale-100 blur-0 grayscale-0'}

@@ -72,9 +72,8 @@ const Home = () => {
       transition={{ duration: 0.5 }}
       className="min-h-screen w-screen mx-auto flex flex-col items-center max-w-6xl"
     >
-      <h1 className="text-3xl font-bold mb-4 mt-7 py-10 px-5 text-center">
-        List up to five ingredients you&apos;d like to use up in the recipe,
-        separated by commas.
+      <h1 className="text-3xl font-semibold mb-4 mt-7 py-10 px-5 text-center">
+      Simply type a recipe idea or some ingredients you have on hand, seperated by commas,  and AI will instantly generate an all-new recipe on demand...
       </h1>
       <RecipeForm onGenerate={handleGenerateRecipe} />
       {error && <ErrorMessage error={error} />}
@@ -117,25 +116,28 @@ const RecipeContent = ({ recipe, imageUrl }: { recipe: string | undefined, image
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -40 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col-reverse w-full items-center gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-20 text-left"
+        className="flex flex-col w-full items-center gap-8 px-4 py-12 md:px-6 lg:px-8 lg:py-20 text-left"
       >
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="w-full px-8 rounded"
+          className="w-full flex flex-col md:flex-row justify-between gap-2"
         >
-          <RecipeParser markdown={recipe} />
+          <div className="w-full md:w-1/2">
+            {imageUrl ? <ImageDisplay imageUrl={imageUrl} /> : <div className="border">Loading</div>}
+          </div>
+          <div className="w-full md:w-1/2">
+            <MarkdownTitleExtractor markdown={recipe} />
+          </div>
         </motion.div>
-      
-          {imageUrl ? <ImageDisplay imageUrl={imageUrl} /> : <div className="border">Loading</div>}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.5 }}
-          className="w-full flex justify-center"
+          className="w-full px-8 rounded"
         >
-          <MarkdownTitleExtractor markdown={recipe} />
+          <RecipeParser markdown={recipe} />
         </motion.div>
       </motion.section>
     )}
