@@ -37,7 +37,7 @@ const RecipeParser = ({ markdown }: { markdown: string }) => {
 
   return (
     <div className="w-full mx-auto">
-      <div className="flex gap-3">
+      <div className="block md:flex gap-3">
         <div className="flex flex-col flex-1 bg-grey-100 p-4 rounded-lg mb-4 border">
           <h2 className="text-2xl font-semibold mb-2">Ingredients:</h2>
           <ul className="">
