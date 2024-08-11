@@ -18,27 +18,27 @@ const RecipeParser = ({ markdown }: { markdown: string }) => {
       setTitle(titleMatch ? titleMatch[1] : "No title found");
       setIngredients(
         ingredientsMatch
-          ? ingredientsMatch[1].split("\n").filter((item:string) => item.trim() !== "")
+          ? ingredientsMatch[1]
+              .split("\n")
+              .filter((item: string) => item.trim() !== "")
           : []
       );
       setInstructions(
         instructionsMatch
           ? instructionsMatch[1]
               .split("\n")
-              .filter((item:string) => item.trim() !== "")
+              .filter((item: string) => item.trim() !== "")
           : []
       );
-
-      
     };
 
     parseRecipe(markdown);
   }, [markdown]);
 
   return (
-    <div className="w-full mx-auto">
-      <div className="block md:flex gap-3">
-        <div className="flex flex-col flex-1 bg-grey-100 p-4 rounded-lg mb-4 border">
+    <div className="block md:flex h-full gap-3">
+      <div className="flex-1 p-4 rounded-lg border">
+        <div className="flex flex-col flex-1 bg-grey-100 p-4 mb-4">
           <h2 className="text-2xl font-semibold mb-2">Ingredients:</h2>
           <ul className="">
             {ingredients.map((ingredient, index) => (
@@ -48,16 +48,16 @@ const RecipeParser = ({ markdown }: { markdown: string }) => {
             ))}
           </ul>
         </div>
-        <div className="flex flex-col flex-1 p-4 rounded-lg border">
-          <h2 className="text-2xl font-semibold mb-2">Instructions:</h2>
-          <ul className="list-inside">
-            {instructions.map((instruction, index) => (
-              <li key={index} className="mb-2">
-                {instruction}
-              </li>
-            ))}
-          </ul>
-        </div>
+      </div>
+      <div className="flex-1 p-4 rounded-lg border">
+        <h2 className="text-2xl font-semibold mb-2">Instructions:</h2>
+        <ul className="list-inside">
+          {instructions.map((instruction, index) => (
+            <li key={index} className="mb-2">
+              {instruction}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

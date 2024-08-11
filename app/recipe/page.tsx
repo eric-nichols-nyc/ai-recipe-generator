@@ -102,9 +102,7 @@ const LoadingIndicator = () => (
     transition={{ duration: 0.3 }}
     className="mt-10 relative"
   >
-    <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md"></div>
-    <Image src="/images/loader.svg" width="250" height="300" alt="loader"/>
-
+    <Image src="/images/loader.svg" width="300" height="300" alt="loader"/>
   </motion.div>
 );
 
@@ -123,7 +121,7 @@ const RecipeContent = ({ recipe, imageUrl }: { recipe: string | undefined, image
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
-          className="w-full flex flex-col md:flex-row justify-between gap-2"
+          className="w-full flex flex-col md:flex-row justify-between gap-4"
         >
           <div className="w-full md:w-1/2">
             {imageUrl ? <ImageDisplay imageUrl={imageUrl} /> : <div className="border">Loading</div>}
