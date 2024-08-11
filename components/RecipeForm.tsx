@@ -49,7 +49,7 @@ const RecipeForm = ({ onGenerate }: { onGenerate: (ingredients: string[]) => voi
             value={ingredients}
             onChange={(e) => setIngredients(e.target.value)}
             placeholder="Enter recipe idea or ingredients separated by commas"
-            className="border p-2 w-full text-black"
+            className="border p-2 w-full text-black text-lg"
           />
         </div>
         <div className="flex gap-2">
