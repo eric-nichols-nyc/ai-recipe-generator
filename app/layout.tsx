@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   icons: [
     {
       url: "/images/logo.svg",
-      href: "/Images/logo.svg",
+      href: "/images/logo.svg",
     },
   ],
   openGraph: {
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
       {
         width: 1200,
         height: 630,
-        url: "https://github.com/eric-nichols-nyc/ai-recipe-generator/blob/main/public/Screenshot.png",
+        url: "https://raw.githubusercontent.com/eric-nichols-nyc/ai-recipe-generator/main/public/Screenshot.png",
       },
     ],
   },
