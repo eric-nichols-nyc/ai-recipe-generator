@@ -9,7 +9,7 @@ import { generateRecipe, getRateLimit } from "@/actions/index";
 import { generateImage } from "@/utils/imageGeneration";
 import MarkdownTitleExtractor from "@/components/MarkdownTitleExtractor";
 import RecipeParser from "@/components/RecipeParser";
-
+import Image from "next/image";
 // Main component
 const Home = () => {
   // State variables
@@ -103,7 +103,8 @@ const LoadingIndicator = () => (
     className="mt-10 relative"
   >
     <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-md"></div>
-    <span className="relative z-10">Thinking...</span>
+    <Image src="/images/loader.svg" width="250" height="300" alt="loader"/>
+
   </motion.div>
 );
 

@@ -1,0 +1,22 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .hat {
+      fill: #fff;
+      stroke: #000;
+      stroke-width: 2;
+    }
+    .loading {
+      animation: pulse 2s infinite;
+      transform-origin: center;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+  <g class="loading">
+    <path class="hat" d="M50 100 Q40 70 70 60 Q90 30 110 60 Q140 70 130 100 Z" />
+    <rect class="hat" x="50" y="100" width="80" height="20" />
+  </g>
+</svg>
