@@ -10,6 +10,22 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Recipe Generator",
   description: "Discover personalized culinary creations with AI-powered recipe generation",
+  icons: [
+    {
+      url: "/images/logo.svg",
+      href: "/Images/logo.svg",
+    },
+  ],
+  openGraph: {
+    url: "https://ai-recipe-generator-nine.vercel.app/",
+    images: [
+      {
+        width: 1200,
+        height: 630,
+        url: "https://github.com/eric-nichols-nyc/ai-recipe-generator/blob/main/public/Screenshot.png",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
