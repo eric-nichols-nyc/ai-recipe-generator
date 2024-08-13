@@ -10,8 +10,21 @@ import { generateImage } from "@/utils/imageGeneration";
 import MarkdownTitleExtractor from "@/components/MarkdownTitleExtractor";
 import RecipeParser from "@/components/RecipeParser";
 import Image from "next/image";
+import RecipeCycler from "@/components/RecipeCycler";
+
+const recipes = [
+  "A high-protein vegan breakfast smoothie with spinach, banana, and chia seeds.",
+  "Easy whole-wheat blueberry muffins that I can make in 30 minutes.",
+  "A gluten-free, dairy-free chocolate cake with no refined sugar.",
+  "Keto-friendly cauliflower rice stir-fry with colorful vegetables and tofu.",
+  "Overnight chia seed pudding with almond milk and fresh berries.",
+  "Quick and easy lentil soup with turmeric and ginger.",
+  "No-bake energy balls made with oats, peanut butter, and honey.",
+  "Zucchini noodles with avocado pesto sauce.",
+];
+
 // Main component
-const Home = () => {
+const Recipe = () => {
   // State variables
   const [recipe, setRecipe] = useState<string | undefined>(undefined);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -31,7 +44,7 @@ const Home = () => {
         generateRecipe(ingredients),
         generateImage(ingredients),
       ]);
-      
+
       setImageUrl(imageUrl);
       await processRecipeStream(recipeStream);
     } catch (error: any) {
@@ -45,16 +58,18 @@ const Home = () => {
   const checkRateLimit = async () => {
     try {
       const userRateLimit = await getRateLimit();
-      console.log('userRateLimit', userRateLimit);
+      console.log("userRateLimit", userRateLimit);
     } catch (error: any) {
-      throw new Error(error.message || "An error occurred while getting user rate limit.");
+      throw new Error(
+        error.message || "An error occurred while getting user rate limit."
+      );
     }
   };
 
   // Function to process the recipe stream
   const processRecipeStream = async (recipeStream: any) => {
     for await (const delta of readStreamableValue(recipeStream)) {
-          setRecipe(delta?.toString());
+      setRecipe(delta?.toString());
     }
   };
 
@@ -73,11 +88,20 @@ const Home = () => {
       className="min-h-screen w-screen mx-auto flex flex-col items-center max-w-6xl"
     >
       <h1 className="text-3xl font-semibold mb-4 mt-7 py-10 px-5 text-center">
-      Simply type a recipe idea or some ingredients you have on hand, seperated by commas,  and AI will instantly generate an all-new recipe on demand...
+        Simply type a recipe idea or some ingredients you have on hand,
+        seperated by commas, and AI will instantly generate an all-new recipe on
+        demand...
       </h1>
       <RecipeForm onGenerate={handleGenerateRecipe} />
+      <div className="mt-5">
+        <RecipeCycler recipes={recipes} />
+      </div>
       {error && <ErrorMessage error={error} />}
-      {loading ? <LoadingIndicator /> : <RecipeContent recipe={recipe} imageUrl={imageUrl} />}
+      {loading ? (
+        <LoadingIndicator />
+      ) : (
+        <RecipeContent recipe={recipe} imageUrl={imageUrl} />
+      )}
     </motion.div>
   );
 };
@@ -102,12 +126,18 @@ const LoadingIndicator = () => (
     transition={{ duration: 0.3 }}
     className="mt-10 relative"
   >
-    <Image src="/images/loader.svg" width="300" height="300" alt="loader"/>
+    <Image src="/images/loader.svg" width="300" height="300" alt="loader" />
   </motion.div>
 );
 
 // Component to display recipe content and image
-const RecipeContent = ({ recipe, imageUrl }: { recipe: string | undefined, imageUrl: string | null }) => (
+const RecipeContent = ({
+  recipe,
+  imageUrl,
+}: {
+  recipe: string | undefined;
+  imageUrl: string | null;
+}) => (
   <AnimatePresence>
     {recipe && (
       <motion.section
@@ -124,7 +154,11 @@ const RecipeContent = ({ recipe, imageUrl }: { recipe: string | undefined, image
           className="w-full flex flex-col md:flex-row justify-between gap-4"
         >
           <div className="w-full md:w-1/2">
-            {imageUrl ? <ImageDisplay imageUrl={imageUrl} /> : <div className="border">Loading</div>}
+            {imageUrl ? (
+              <ImageDisplay imageUrl={imageUrl} />
+            ) : (
+              <div className="border">Loading</div>
+            )}
           </div>
           <div className="w-full md:w-1/2">
             <MarkdownTitleExtractor markdown={recipe} />
@@ -143,4 +177,4 @@ const RecipeContent = ({ recipe, imageUrl }: { recipe: string | undefined, image
   </AnimatePresence>
 );
 
-export default Home;
+export default Recipe;
